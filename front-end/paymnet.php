@@ -1,3 +1,7 @@
+<?php
+include("../admin_template/db_conn.php");
+
+?>
 <!DOCTYPE html>
 <html>
 <head>

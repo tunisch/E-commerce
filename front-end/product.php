@@ -1,5 +1,6 @@
 <?php
-    include("../db.php");
+    include("../admin_template/db_conn.php");
+    
     
 // Ürünlerin dizisi (gerçek veritabanından alınabilir)
 $product_id = $_GET['id'];

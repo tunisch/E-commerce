@@ -1,14 +1,18 @@
 <?php
-include("config.php/db_connect.php");
+include("../admin_template/db_conn.php");
 
-$category_id = $_GET['id'];
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-$category_result = $conn->query("SELECT * FROM categories WHERE id = $category_id");
-$category = $category_result->fetch_assoc();
+if ($id > 0) {
+    $category_result = $conn->query("SELECT * FROM category_table WHERE id = $id");
+    $category = $category_result->fetch_assoc();
 
-$product_result = $conn->query("SELECT * FROM products WHERE category_id = $category_id");
+    $product_result = $conn->query("SELECT * FROM product_table WHERE category_id = $id");
+} else {
+    echo "Invalid category ID.";
+    exit();
+}
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,3 +31,4 @@ $product_result = $conn->query("SELECT * FROM products WHERE category_id = $cate
     }
     ?>
 </body>
+</html>
