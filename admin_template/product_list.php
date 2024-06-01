@@ -1,5 +1,5 @@
 <?php
-include "db_conn.php";
+include "db_conn.php"; 
 ?>    
 <!DOCTYPE html>
 <html lang="en">
@@ -63,15 +63,16 @@ include "db_conn.php";
                 <th scope="col">Stock_quantity</th>
                 <th scope="col">Description</th>
                 <th scope="col">Category_id</th>
+                <th scope="col">Action</th>
                 
             </tr>   
           </thead>
           <tbody>
             <?php
-            include "db_conn.php";
+             include "db_conn.php";
             $sql = "SELECT * FROM product_table";
             $result = mysqli_query($conn, $sql);
-            while($row = mysqli_fetch_assoc($result)){
+            while($row = mysqli_fetch_assoc($result)){ 
              ?>
                  <tr>
                     <th><?php echo $row["id"] ?></th>
@@ -82,10 +83,10 @@ include "db_conn.php";
                     <th><?php echo $row["description"] ?></th>
                     <th><?php echo $row["category_id"] ?></th>
                     
-                    <td>
-                        <a href="product_edit.php?id=<?php echo $row["id"] ?>" class="btn btn-primary">Edit</a>
-                        <a href="product_delete.php?id=<?php echo $row["id"] ?>" class="btn btn-danger">Delete</a>
                     
+                    <td>
+                    <a href="admin_edit.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-pencil-square"></i></a>
+                      <a href="admin_delete.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-trash"></i></a>
                     </td>
                     
             

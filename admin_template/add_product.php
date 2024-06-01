@@ -5,7 +5,7 @@ include 'db_conn.php';
 if(isset($_POST["submit"])){
     $id = $_POST["id"];
     $name = $_POST["name"];
-    $picture = $_POST["picture"];
+    $picture = $_FILES["picture"];
     $price = $_POST["price"];
     $stock_quantity = $_POST["stock_quantity"];
     $description = $_POST["description"];
@@ -91,7 +91,8 @@ if(isset($_POST["submit"])){
         </div>
 
         <div class="container d-flex justify-content-center">
-            <form action="add_product.php" method="post" style="width:50vw; min-width:300px;">
+        <form action="product_list.php" method="post" style="width:50vw; min-width:300px;">
+
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Name:</label>

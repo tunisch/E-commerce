@@ -8,7 +8,7 @@ if(isset($_POST["submit"])){
     $order = $_POST["order"];
     $status = $_POST["status"];
 
-
+    
 
 
     $sql = "UPDATE `category_table` SET `name`='$name',`order`='
@@ -92,16 +92,18 @@ if(isset($_POST["submit"])){
                 </div>
 
                 <div class="col">
-                    <label class="form-label">Order:</label>
-                    <input type="order" class="form-control" name="order" 
+
+                    <label for="order"  class="form-label">Order:</label>
+                    <input type="text" class="form-control" name="order" 
                     value="<?php echo $row["order"] ?>">
                 </div>
 
                 <div class="col">
                     <label class="form-label">Status:</label>
-                    <input type="status" class="form-control" name="status" 
+                    <input type="text" class="form-control" name="status" 
                     value="<?php echo $row["status"] ?>">
                 </div>
+
 
             </div>
 

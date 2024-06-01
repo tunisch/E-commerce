@@ -59,7 +59,8 @@ include "db_conn.php";
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Order</th>
-                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+          
                 
             </tr>   
           </thead>
@@ -73,10 +74,9 @@ include "db_conn.php";
                  <tr>
                     <th><?php echo $row["id"] ?></th>
                     <th><?php echo $row["name"] ?></th>
-                    <th><?php echo $row["order"] ?></th>
-                    <th><?php echo $row["status"] ?></th>
+                    <th><?php echo $row["description"] ?></th>
     
-
+                    <td>
                       <a href="category_edit.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-pencil-square"></i></a>
                       <a href="category_delete.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-trash"></i></a>
                     </td>

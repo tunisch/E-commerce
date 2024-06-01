@@ -4,7 +4,7 @@ include 'db_conn.php';
 
 if(isset($_POST["submit"])){
     $name = $_POST["name"];
-    $picture = $_POST["picture"];
+    $picture = $_FILES["picture"];
     $price = $_POST["price"];
     $stock_quantity = $_POST["stock_quantity"];
     $description = $_POST["description"];
@@ -76,8 +76,9 @@ if(isset($_POST["submit"])){
         </div>
 
         <?php
-        /* $id = $_GET["id"]; */
+        
         $sql = "SELECT * FROM product_table WHERE id";
+        /* $id = $_GET["id"]; */
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
         ?>
@@ -93,7 +94,7 @@ if(isset($_POST["submit"])){
                 <div class="form-group mb-3">
                     <label for="formFile" class="form-label">Product Image:</label>
                     <input class="form-control" type="file" id="formFile" name="image" 
-                    value="<?php echo $row["image"] ?>">
+                    value="<?php echo isset ($row["image"]) ? $row["image"] : ""; ?>">
                 </div>
 
 
@@ -130,6 +131,8 @@ if(isset($_POST["submit"])){
                 <div class="col-sm-10">
                     <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $row["id"]; ?>">
                 </div>
+
+                
 
 
              

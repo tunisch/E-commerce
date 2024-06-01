@@ -1,21 +1,22 @@
 <?php
-session_start();
 include("../admin_template/db_conn.php");
 
-$card = isset($_SESSION["card"]) ? $_SESSION["card"] : array();
-
-$products = [];
-if(!empty($card)) {
-    $product_ids = implode(",", array_keys($card));
-    $sql = "SELECT * FROM product_table WHERE id IN ($product_ids)";
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()) {
-        $products[] = $row;
-    }
+if(isset($_GET["id"])) {
+    $product_id = $_GET["id"];
+    $sql = "SELECT * FROM product_table WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $product = $result->fetch_assoc();
 }
 
-if(isset($_POST["proceed"])) {
-    header("Location: shipping.php");
+if(isset($_POST["add_to_cart"])) {
+    $product_id = $_POST["product_id"];
+    // Sepete ekleme işlemleri burada yapılabilir
+    // Örnek olarak $_SESSION kullanarak sepet işlemi yapılabilir.
+    $_SESSION["cart"][$product_id] = 1; // miktar eklenebilir
+    header("Location: card.php");
 }
 ?>
 
@@ -24,7 +25,7 @@ if(isset($_POST["proceed"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card</title>
+    <title>Product Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .container {
@@ -68,31 +69,23 @@ if(isset($_POST["proceed"])) {
 
     <div class="container">
         <div class="text-center mb-4">
-            <h3>Card</h3>
+            <h3><?php echo $product["name"]; ?></h3>
         </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($products as $product) { ?>
-                    <tr>
-                        <td><?php echo $product["name"]; ?></td>
-                        <td><?php echo $card[$product["id"]]; ?></td>
-                        <td><?php echo $product["price"]; ?> USD</td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-        <form method="post" action="card.php">
-            <button type="submit" name="proceed" class="btn btn-success">Proceed</button>
-        </form>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="<?php echo $product["picture"]; ?>" class="img-fluid" alt="<?php echo $product["name"]; ?>">
+            </div>
+            <div class="col-md-6">
+                <h4><?php echo $product["price"]; ?> USD</h4>
+                <p><?php echo $product["description"]; ?></p>
+                <p>Stock Quantity: <?php echo $product["stock_quantity"]; ?></p>
+                <form method="post" action="product_detail.php?id=<?php echo $product["id"]; ?>">
+                    <input type="hidden" name="product_id" value="<?php echo $product["id"]; ?>">
+                    <button type="submit" name="add_to_cart" class="btn btn-success">Add to Cart</button>
+                </form>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

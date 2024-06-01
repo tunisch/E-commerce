@@ -1,21 +1,13 @@
 <?php
-session_start();
 include("../admin_template/db_conn.php");
 
-$card = isset($_SESSION["card"]) ? $_SESSION["card"] : array();
-
-$products = [];
-if(!empty($card)) {
-    $product_ids = implode(",", array_keys($card));
-    $sql = "SELECT * FROM product_table WHERE id IN ($product_ids)";
-    $result = $conn->query($sql);
-    while($row = $result->fetch_assoc()) {
-        $products[] = $row;
-    }
-}
-
-if(isset($_POST["proceed"])) {
-    header("Location: shipping.php");
+if(isset($_GET["id"])) {
+    $category_id = $_GET["id"];
+    $sql = "SELECT * FROM product_table WHERE category_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $category_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 }
 ?>
 
@@ -24,7 +16,7 @@ if(isset($_POST["proceed"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card</title>
+    <title>Category Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .container {
@@ -68,31 +60,23 @@ if(isset($_POST["proceed"])) {
 
     <div class="container">
         <div class="text-center mb-4">
-            <h3>Card</h3>
+            <h3>Category Products</h3>
         </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($products as $product) { ?>
-                    <tr>
-                        <td><?php echo $product["name"]; ?></td>
-                        <td><?php echo $card[$product["id"]]; ?></td>
-                        <td><?php echo $product["price"]; ?> USD</td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-        <form method="post" action="card.php">
-            <button type="submit" name="proceed" class="btn btn-success">Proceed</button>
-        </form>
+        <div class="row">
+            <?php while($product = $result->fetch_assoc()) { ?>
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <img src="<?php echo $product["picture"]; ?>" class="card-img-top" alt="<?php echo $product["name"]; ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $product["name"]; ?></h5>
+                            <p class="card-text"><?php echo $product["price"]; ?> USD</p>
+                            <a href="product_detail.php?id=<?php echo $product["id"]; ?>" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

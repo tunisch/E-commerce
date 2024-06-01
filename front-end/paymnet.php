@@ -1,19 +1,21 @@
 <?php
 include("../admin_template/db_conn.php");
-
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Payment</title>
+    <meta charset="UTF-8">
+    <title>Ödeme</title>
+    <link rel="stylesheet" href="http://css/styles.css">
 </head>
 <body>
-    <h1>Payment</h1>
-    <form method="post" action="order_success.php">
-        Credit Card Number: <input type="text" name="card_number"><br>
-        Expiry Date: <input type="text" name="expiry_date"><br>
-        CVV: <input type="text" name="cvv"><br>
-        <input type="submit" value="Buy">
+    <h1>Ödeme Bilgileri</h1>
+    <form action="success.php" method="post">
+        <label>Kredi Kartı Numarası: <input type="text" name="cardnumber"></label><br>
+        <label>Son Kullanma Tarihi: <input type="text" name="expdate"></label><br>
+        <label>CVV: <input type="text" name="cvv"></label><br>
+        <button type="submit">Satın Al</button>
     </form>
 </body>
 </html>
