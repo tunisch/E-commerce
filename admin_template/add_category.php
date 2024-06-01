@@ -57,15 +57,12 @@ if(isset($_POST["submit"])){
                 <li><a class="dropdown-item" href="admin_list.php">ADMIN LIST</a></li>
                 <li><a class="dropdown-item" href="add_admin.php">ADD ADMIN</a></li>
                 <li><a class="dropdown-item" href="admin_edit.php">EDIT ADMIN</a></li>
-                <li><a class="dropdown-item" href="admin_delete.php">DELETE ADMIN</a></li>
                 <li><a class="dropdown-item" href="category_list.php">CATEGORY LIST</a></li>
                 <li><a class="dropdown-item" href="add_category.php">ADD CATEGORY</a></li>
                 <li><a class="dropdown-item" href="category_edit.php">EDIT CATEGORY</a></li>
-                <li><a class="dropdown-item" href="category_delete.php">DELETE CATEGORY</a></li>
                 <li><a class="dropdown-item" href="product_list.php">PRODUCT LIST</a></li>
                 <li><a class="dropdown-item" href="add_product.php">ADD PRODUCT</a></li>
                 <li><a class="dropdown-item" href="product_edit.php">EDIT PRODUCT</a></li>
-                <li><a class="dropdown-item" href="product_delete.php">DELETE PRODUCT</a></li>
                 <li><a class="dropdown-item" href="order_list.php">ORDER LIST</a></li>
             </ul>
         </li>
@@ -76,13 +73,10 @@ if(isset($_POST["submit"])){
         <div class="text-center mb-4">
             <h3>Add New Category</h3>
             <?php
-                if(isset($_GET["message"])){ //if message is set
-                  $message = $_GET["message"];
-                  echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
-                  '.$message.'
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>';
-                }
+            //if message is set
+            if(isset($_GET["message"])){
+                echo '<div class="alert alert-danger" role="alert">' . $_GET["message"] . '</div>';
+            }
             ?>
             <p class="text-muted">Complete the form below to add a new category</p>
         </div>
@@ -99,12 +93,14 @@ if(isset($_POST["submit"])){
                     <label class="form-label">Order:</label>
                     <input type="text" class="form-control" name="order" placeholder="Order">
                 </div>
-
+                
                 <div class="col">
                     <label class="form-label">Status:</label>
-                    <input type="status" class="form-control" name="status" placeholder="Status">
+                    <select class="form-select" name="status">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>       
                 </div>
-            </div>
                 <div>
                     <button type="submit" class="btn btn-success" name="submit">Save</button>
                     <a href="category_list.php" class="btn btn-danger">Cancel</a>

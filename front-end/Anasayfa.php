@@ -8,8 +8,8 @@ include("../admin_template/db_conn.php");
 $product_sql = "SELECT * FROM product_table LIMIT ";/* 
 $product_result = $conn->query($product_sql); */
 
-// Get all categories
-$category_sql = "SELECT * FROM category_table";
+// Get all categories but only active ones and order by order column
+$category_sql = "SELECT * FROM category_table WHERE status = 1 ORDER BY `order` ASC";
 $category_result = $conn->query($category_sql);
 
 ?>
@@ -69,23 +69,27 @@ $category_result = $conn->query($category_sql);
 </nav>
 
     <!-- Navbar end -->
-    <div class="container">
+    <div class="container"> 
         <!-- Categories Section -->
         <div class="text-center mb-4">
             <h3>Categories</h3>
         </div>
         <div class="row">
-            <?php while($category = $category_result->fetch_assoc()) { ?>
+            
+            <?php
+            
+            while($category = $category_result->fetch_assoc()) { ?>
                 <div class="col-md-3 mb-4">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo $category["name"]; ?></h5>
-                            <p class="card-text"><?php echo $category["description"]; ?></p>
                             <a href="category_detail.php?id=<?php echo $category["id"]; ?>" class="btn btn-primary">View Products</a>
                         </div>
                     </div>
                 </div>
             <?php } ?>
+                
+
         </div>
 
         <!-- Products Section -->

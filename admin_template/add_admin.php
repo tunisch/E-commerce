@@ -54,19 +54,16 @@ if(isset($_POST["submit"])){
                 ADMIN MANAGEMENT
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="admin_panel.php">ADMIN PANEL</a></li>
+            <li><a class="dropdown-item" href="admin_panel.php">ADMIN PANEL</a></li>
                 <li><a class="dropdown-item" href="admin_list.php">ADMIN LIST</a></li>
                 <li><a class="dropdown-item" href="add_admin.php">ADD ADMIN</a></li>
                 <li><a class="dropdown-item" href="admin_edit.php">EDIT ADMIN</a></li>
-                <li><a class="dropdown-item" href="admin_delete.php">DELETE ADMIN</a></li>
                 <li><a class="dropdown-item" href="category_list.php">CATEGORY LIST</a></li>
                 <li><a class="dropdown-item" href="add_category.php">ADD CATEGORY</a></li>
                 <li><a class="dropdown-item" href="category_edit.php">EDIT CATEGORY</a></li>
-                <li><a class="dropdown-item" href="category_delete.php">DELETE CATEGORY</a></li>
                 <li><a class="dropdown-item" href="product_list.php">PRODUCT LIST</a></li>
                 <li><a class="dropdown-item" href="add_product.php">ADD PRODUCT</a></li>
                 <li><a class="dropdown-item" href="product_edit.php">EDIT PRODUCT</a></li>
-                <li><a class="dropdown-item" href="product_delete.php">DELETE PRODUCT</a></li>
                 <li><a class="dropdown-item" href="order_list.php">ORDER LIST</a></li>
             </ul>
         </li>

@@ -27,15 +27,12 @@ include "db_conn.php";
                 <li><a class="dropdown-item" href="admin_list.php">ADMIN LIST</a></li>
                 <li><a class="dropdown-item" href="add_admin.php">ADD ADMIN</a></li>
                 <li><a class="dropdown-item" href="admin_edit.php">EDIT ADMIN</a></li>
-                <li><a class="dropdown-item" href="admin_delete.php">DELETE ADMIN</a></li>
                 <li><a class="dropdown-item" href="category_list.php">CATEGORY LIST</a></li>
                 <li><a class="dropdown-item" href="add_category.php">ADD CATEGORY</a></li>
                 <li><a class="dropdown-item" href="category_edit.php">EDIT CATEGORY</a></li>
-                <li><a class="dropdown-item" href="category_delete.php">DELETE CATEGORY</a></li>
                 <li><a class="dropdown-item" href="product_list.php">PRODUCT LIST</a></li>
                 <li><a class="dropdown-item" href="add_product.php">ADD PRODUCT</a></li>
                 <li><a class="dropdown-item" href="product_edit.php">EDIT PRODUCT</a></li>
-                <li><a class="dropdown-item" href="product_delete.php">DELETE PRODUCT</a></li>
                 <li><a class="dropdown-item" href="order_list.php">ORDER LIST</a></li>
             </ul>
         </li>
@@ -59,6 +56,7 @@ include "db_conn.php";
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Order</th>
+                <th scope="col">Status</th>
                 <th scope="col">Action</th>
           
                 
@@ -74,19 +72,32 @@ include "db_conn.php";
                  <tr>
                     <th><?php echo $row["id"] ?></th>
                     <th><?php echo $row["name"] ?></th>
-                    <th><?php echo $row["description"] ?></th>
+                    <th><?php echo $row["order"] ?></th>
+                    
+                    <td>
+                      <?php
+                      if($row["status"] == 1){
+                        echo '<span class="badge bg-success">Active</span>';
+                      }else{
+                        echo '<span class="badge bg-danger">Inactive</span>';
+                      }
+                      ?>
+                    
     
                     <td>
                       <a href="category_edit.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-pencil-square"></i></a>
                       <a href="category_delete.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="bi bi-trash"></i></a>
                     </td>
-                    
+                   
+                   
             
             </tr>
              <?php
-              
+
             }
             ?>
+                
+
 
          
             
