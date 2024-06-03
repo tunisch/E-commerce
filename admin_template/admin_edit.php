@@ -21,6 +21,16 @@ if(isset($_POST["submit"])){
         echo "Failed: " . $sql . "<br>" . mysqli_error($conn);
     }
 }
+
+if (isset($_GET["id"])) {
+    $id = mysqli_real_escape_string($conn, $_GET["id"]);
+    $sql = "SELECT * FROM admin_table WHERE id = '$id'";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+    }
+} 
     
     ?>
     
@@ -50,13 +60,10 @@ if(isset($_POST["submit"])){
                 <li><a class="dropdown-item" href="admin_panel.php">ADMIN PANEL</a></li>
                 <li><a class="dropdown-item" href="admin_list.php">ADMIN LIST</a></li>
                 <li><a class="dropdown-item" href="add_admin.php">ADD ADMIN</a></li>
-                <li><a class="dropdown-item" href="admin_edit.php">EDIT ADMIN</a></li>
                 <li><a class="dropdown-item" href="category_list.php">CATEGORY LIST</a></li>
                 <li><a class="dropdown-item" href="add_category.php">ADD CATEGORY</a></li>
-                <li><a class="dropdown-item" href="category_edit.php">EDIT CATEGORY</a></li>
                 <li><a class="dropdown-item" href="product_list.php">PRODUCT LIST</a></li>
                 <li><a class="dropdown-item" href="add_product.php">ADD PRODUCT</a></li>
-                <li><a class="dropdown-item" href="product_edit.php">EDIT PRODUCT</a></li>
                 <li><a class="dropdown-item" href="order_list.php">ORDER LIST</a></li>
             </ul>
         </li>
@@ -70,13 +77,7 @@ if(isset($_POST["submit"])){
             <p class="text-muted">Click update after changing any information</p>
         </div>
 
-        <?php
-        
-        $sql = "SELECT * FROM admin_table WHERE id";
-        /* $id = $_GET["id"]; */
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        ?>
+    
         <div class="container d-flex justify-content-center">
             <form action="add_admin.php" method="post" style="width:50vw; min-width:300px;">
             <div class="row mb-3">

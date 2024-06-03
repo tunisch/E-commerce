@@ -1,123 +1,135 @@
 <?php
+session_start();
 include("../admin_template/db_conn.php");
 
+// 10 ürünü al
+$product_sql = "SELECT * FROM product_table LIMIT 10"; 
+$product_result = $conn->query($product_sql); 
 
-
-
-// Get 10 products
-$product_sql = "SELECT * FROM product_table LIMIT ";/* 
-$product_result = $conn->query($product_sql); */
-
-// Get all categories but only active ones and order by order column
+// Sadece aktif olan kategorileri al ve 'order' sütununa göre sırala
 $category_sql = "SELECT * FROM category_table WHERE status = 1 ORDER BY `order` ASC";
 $category_result = $conn->query($category_sql);
 
+// Sepetteki ürün sayısını sepete eklenen urun sayisi kadar arttır ve azaltacak olan kod bloğu
+$cart_count = 0;
+if(isset($_SESSION['cart'])) {
+    foreach($_SESSION['cart'] as $item) {
+        $cart_count += $item['item_quantity'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-
-
+    <title>E-Commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
-        .container{
+        .container {
             margin-top: 100px;
         }
+        .cart-count {
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .product-image {
+            width: 100%;
+            height: auto;
+        }
     </style>
-
-
-
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-light bg-light fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">E-commerce Platform</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="Anasayfa.php">Home</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="Anasayfa.php">E-commerce Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
                     <li class="nav-item">
-                        <button>
-                            <a class="nav-link" href="../admin_template/admin_login.php">Admin Login</a>
-                        </button>
+                        <a class="nav-link" href="../admin_template/admin_login.php">Admin Login</a>
                     </li>
-                    
                 </ul>
-                <form class="d-flex">
+                <form class="d-flex me-auto">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.php">
+                            <i class="bi bi-cart4"></i>
+                            <span class="cart-count badge bg-danger"><?php echo $cart_count; ?></span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-    <!-- Navbar end -->
+    <!-- Navbar sonu -->
     <div class="container"> 
-        <!-- Categories Section -->
+        <!-- Kategoriler Bölümü -->
         <div class="text-center mb-4">
             <h3>Categories</h3>
         </div>
         <div class="row">
-            
-            <?php
-            
-            while($category = $category_result->fetch_assoc()) { ?>
+            <?php while($category = $category_result->fetch_assoc()) { ?>
                 <div class="col-md-3 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $category["name"]; ?></h5>
-                            <a href="category_detail.php?id=<?php echo $category["id"]; ?>" class="btn btn-primary">View Products</a>
+                    <div class="product-cart">
+                        <div class="cart-body">
+                            <h5 class="cart-title"><?php echo $category["name"]; ?></h5>
+                            <a href="category_detail.php?id=<?php echo $category["id"]; ?>" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>
             <?php } ?>
-                
-
         </div>
 
-        <!-- Products Section -->
+        <!-- Ürünler Bölümü -->
         <div class="text-center mb-4">
             <h3>Products</h3>
         </div>
-        <div class="row">  
-        <?php $product_result = $conn->query("SELECT * FROM product_table");
-             while($product = $product_result->fetch_assoc()) { ?>
+        <div class="row">
+            <?php while($product = $product_result->fetch_assoc()) { ?>
                 <div class="col-md-3 mb-4">
-                    <div class="card">
-                        <img src="<?php echo $product["picture"]; ?>" class="card-img-top" alt="<?php echo $product["name"]; ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $product["name"]; ?></h5>
-                            <p class="card-text"><?php echo $product["price"]; ?> USD</p>
-                            <a href="product_detail.php?id=<?php echo $product["id"]; ?>" class="btn btn-primary">View Details</a>
+                    <div class="product-cart">
+                        <?php 
+                        $imgPath = "../admin_template/images/" . $product["picture"];
+                        if(file_exists($imgPath)){
+                            echo "<img src='$imgPath' class='product-image' alt='".$product["name"]."'>";
+                        } else {
+                            echo "<img src='default_image.jpg' class='product-image' alt='Default Image'>";
+                        }
+                        ?>
+                        <div class="cart-body">
+                            <h5 class="cart-title"><?php echo $product["name"]; ?></h5>
+                            <p class="cart-text"><?php echo $product["price"]; ?> USD</p>
+                            <a href="product_detail.php?id=<?php echo $product["id"]; ?>" class="btn btn-secondary">View Details</a>
                         </div>
                     </div>
                 </div>
-            <?php } 
-            ?>
+            <?php } ?>
         </div>
     </div>
-    
-    
 
-
-
-
+    <!-- Footer Bölümü -->
+    <footer class="bg-light text-center text-lg-start mt-4">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 E-commerce Platform:
+            <a class="text-dark" href="https://ecommerce-platform.com/">ecommerce-platform.com</a>
+        </div>
+    </footer>
 </body>
 </html>

@@ -1,21 +1,25 @@
 <?php
 include 'db_conn.php';
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = mysqli_real_escape_string($conn, $_POST['id']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $order = mysqli_real_escape_string($conn, $_POST['order']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $status = mysqli_real_escape_string($conn, $_POST['status']);  
 
     $sql = "UPDATE category_table SET name = '$name', `order` = '$order', status = '$status' WHERE id = '$id'";
+ 
+    $result = mysqli_query($conn, $sql);
 
-    if (mysqli_query($conn, $sql)) {
+    if ($result) {
         header("Location: category_list.php?message=Data updated successfully");
+        exit;
     } else {
         echo "Failed: " . $sql . "<br>" . mysqli_error($conn);
     }
-
-    mysqli_close($conn);
+    
 }
 
 if (isset($_GET["id"])) {
@@ -25,9 +29,6 @@ if (isset($_GET["id"])) {
 
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-    } else {
-        echo "Category not found.";
-        exit;
     }
 } 
    
@@ -55,13 +56,10 @@ if (isset($_GET["id"])) {
                     <li><a class="dropdown-item" href="admin_panel.php">ADMIN PANEL</a></li>
                     <li><a class="dropdown-item" href="admin_list.php">ADMIN LIST</a></li>
                     <li><a class="dropdown-item" href="add_admin.php">ADD ADMIN</a></li>
-                    <li><a class="dropdown-item" href="admin_edit.php">EDIT ADMIN</a></li>
                     <li><a class="dropdown-item" href="category_list.php">CATEGORY LIST</a></li>
                     <li><a class="dropdown-item" href="add_category.php">ADD CATEGORY</a></li>
-                    <li><a class="dropdown-item" href="category_edit.php">EDIT CATEGORY</a></li>
                     <li><a class="dropdown-item" href="product_list.php">PRODUCT LIST</a></li>
                     <li><a class="dropdown-item" href="add_product.php">ADD PRODUCT</a></li>
-                    <li><a class="dropdown-item" href="product_edit.php">EDIT PRODUCT</a></li>
                     <li><a class="dropdown-item" href="order_list.php">ORDER LIST</a></li>
                 </ul>
             </li>

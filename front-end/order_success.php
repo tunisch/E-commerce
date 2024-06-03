@@ -1,75 +1,63 @@
-<?php 
+<?php
+session_start();
 include("../admin_template/db_conn.php");
+
+// Assign session variables to local variables
+$product_name = $_SESSION['product_name'];
+$product_price = $_SESSION['product_price'];
+$quantity = $_SESSION['quantity'];
+$full_name = $_SESSION['full_name'];
+$phone = $_SESSION['phone'];
+$address = $_SESSION['address'];
+$city = $_SESSION['city'];
+$postal_code = $_SESSION['postal_code'];
+$country = $_SESSION['country'];
+$card_number = $_SESSION['card_number'];
+$expiry_date = $_SESSION['expiry_date'];
+$cvv = $_SESSION['cvv'];
+
+mysqli_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sipariş Başarılı</title>
-    <link rel="stylesheet" href="http://css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 100px;
+        }
+        .product-image {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1></h1>
-    <p>Siparişiniz en kısa sürede kargoya verilecektir.</p>
+    <div class="container">
+        <h2>Order Success</h2>
+        <p>Your order has been successfully placed.</p>
+        <!-- Display order details here -->
+        <p>Order Details:</p>
+        <p>Product Name: <?php echo $product_name; ?></p>
+        <p>Product Price: <?php echo $product_price; ?></p>
+        <p>Quantity: <?php echo $quantity; ?></p>
+        <p>Full Name: <?php echo $full_name; ?></p>
+        <p>Phone: <?php echo $phone; ?></p>
+        <p>Address: <?php echo $address; ?></p>
+        <p>City: <?php echo $city; ?></p>
+        <p>Postal Code: <?php echo $postal_code; ?></p>
+        <p>Country: <?php echo $country; ?></p>
+        <p>Card Number: <?php echo $card_number; ?></p>
+        <p>Expiry Date: <?php echo $expiry_date; ?></p>
+        <p>CVV: <?php echo $cvv; ?></p>
+        <p>Your order will be shipped soon.</p>
+        <p>Thank you for shopping with us!</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php
-// Siparişi veritabanına kaydetme işlemi
-// Bu bölümde ödeme ve kargo bilgilerini alarak Orders ve OrderItems tablolarına ekleme işlemi yapılır.
-// Bu işlemi yaparken öncelikle Orders tablosuna sipariş bilgileri eklenir ve daha sonra OrderItems tablosuna siparişe ait ürünler eklenir.
-
-// Sipariş bilgilerini al
-$customer_id = $_SESSION["customer_id"];
-$payment_type = $_POST["payment_type"];
-$shipping_type = $_POST["shipping_type"];
-$shipping_address = $_POST["shipping_address"];
-$shipping_city = $_POST["shipping_city"];
-$shipping_zip = $_POST["shipping_zip"];
-$shipping_country = $_POST["shipping_country"];
-$shipping_phone = $_POST["shipping_phone"];
-$shipping_email = $_POST["shipping_email"];
-$shipping_note = $_POST["shipping_note"];
-$shipping_cost = $_POST["shipping_cost"];
-$payment_cost = $_POST["payment_cost"];
-$total_cost = $_POST["total_cost"];
-
-// Sipariş bilgilerini Orders tablosuna ekle
-$sql = "INSERT INTO Orders (customer_id, payment_type, shipping_type, shipping_address, shipping_city, shipping_zip, shipping_country, shipping_phone, shipping_email, shipping_note, shipping_cost, payment_cost, total_cost) VALUES ('$customer_id', '$payment_type', '$shipping_type', '$shipping_address', '$shipping_city', '$shipping_zip', '$shipping_country', '$shipping_phone', '$shipping_email', '$shipping_note', '$shipping_cost', '$payment_cost', '$total_cost')";
-$result = mysqli_query($conn, $sql);
-
-// Sipariş bilgilerini OrderItems tablosuna ekle
-$order_id = mysqli_insert_id($conn);
-foreach ($_SESSION["cart"] as $product_id => $quantity) {
-    $sql = "INSERT INTO OrderItems (order_id, product_id, quantity) VALUES ('$order_id', '$product_id', '$quantity')";
-    $result = mysqli_query($conn, $sql);
-}
-
-// Sipariş tamamlandıktan sonra sepeti boşalt
-unset($_SESSION["cart"]);
-
-// Sipariş tamamlandıktan sonra sipariş numarasını göster   
-echo "<p>Siparişiniz başarıyla alındı. Sipariş numaranız: $order_id</p>";
-
-// Sipariş tamamlandıktan sonra müşteriye e-posta gönder
-$to = $shipping_email;
-$subject = "Siparişiniz alındı";
-$message = "Siparişiniz başarıyla alındı. Sipariş numaranız: $order_id";
-$headers = "From:  ";mail($to, $subject, $message, $headers);
-
-// Sipariş tamamlandıktan sonra yönlendirme yap
-header("Location: order_success.php");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>
